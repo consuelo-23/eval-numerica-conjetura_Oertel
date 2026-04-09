@@ -11,8 +11,54 @@ def _inside(A: np.ndarray, b: np.ndarray, x: np.ndarray, tol: float = 1e-9) -> b
     """Chequea si x cumple Ax <= b (con tolerancia)."""
     return bool(np.all(A @ x <= b + tol))
 
+def oertel(A, b, d,
+           puntos_test, #lista [v0, v1, v2, va]
+           z_vals = [0,1,2],
+           N_hip = 2000,
+           N = 10**6,
+           tol = 1e-9,
+           batch = None,
+           target_mb = None):
+    
+    #--------- búsqueda de centerpoint sobre puntos específicos ------
+    bestF = -np.inf
+    bestCP = None
+    bestU = None
+    
 
-def oertel(
+    for candidato in puntos_test: #iterar sobre los centerpoints candidatos
+        cp = np.asarray(candidato, dtype = float) #verificar que sea array
+
+        if not _inside(A, b, cp, tol=tol):
+            print(f"Punto {cp} fuera de los límites, me lo salto")
+            continue
+
+        #evaluar el ratio de oertel
+
+        F_cp, u_cp = ratio_cp(
+            A, b, cp, z_vals, N_hip, d, N, tol=tol, batch= batch, target_mb=target_mb)
+        #que tan central es el punto
+
+        print(f"Punto{cp[:1]} -> F: {F_cp:.4f}")
+
+        #guardamos el mejor de los 4 puntos
+        if F_cp > bestF:
+            bestF = float(F_cp)
+            bestCP = cp.copy()
+            bestU = np.asarray(u_cp, dtype = float)
+        
+    return bestCP, float(bestF), bestU
+
+
+        
+    
+
+
+
+
+
+
+def ortel(
     A: np.ndarray,
     b: np.ndarray,
     d: int,
