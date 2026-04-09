@@ -6,7 +6,7 @@ from scipy.spatial import ConvexHull
 #que los puntos tengan como primera coordenada las z
 def get_centerpoints(verts):
     """
-    input: vértices de la envolvente convexa
+    input: vértices que forman la figura en las 3 slices (tienen que estar las 3 slices en le input)
 
     output: centróide de cada slice y el punto medio entre
     los centróides de la slice 0 y 2
@@ -42,7 +42,7 @@ def get_centerpoints(verts):
         v2 = float(sum[2] / (6 * area))
         centroides.append([z, v1, v2])
 
-    va = float((centroides[0][0] + centroides[2][0]) / 2)
+    va = int((centroides[0][0] + centroides[2][0]) / 2)
     vb = float((centroides[0][1] + centroides[2][1]) / 2)
     vc = float((centroides[0][2] + centroides[2][2]) / 2)
     v = [va, vb, vc]
