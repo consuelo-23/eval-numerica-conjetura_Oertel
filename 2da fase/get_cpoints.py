@@ -11,11 +11,12 @@ def get_centerpoints(verts):
     output: centróide de cada slice y el punto medio entre
     los centróides de la slice 0 y 2
     """
-  
+    verts = np.asarray(verts)
     centroides = []
+
     for z in [0,1,2]:
-        mask = (verts[:,0] ==z) #filtro para quedarnos sólo con los puntos de la slice z
-        puntos__ = verts[mask][:,1:] #puntos de la slice z, sin la coordenada entera
+        filtro = (verts[:,0] ==z) #filtro para quedarnos sólo con los puntos de la slice z
+        puntos__ = verts[filtro][:,1:] #puntos de la slice z, sin la coordenada entera
         
         hull = ConvexHull(puntos__)
         puntos = puntos__[hull.vertices]
@@ -37,8 +38,8 @@ def get_centerpoints(verts):
             sum[1] += A * (x0 + x1)
             sum[2] += A * (y0 + y1)
         area *= 0.5
-        v1 = sum[1] / (6 * area)
-        v2 = sum[2] / (6 * area)
+        v1 = float(sum[1] / (6 * area))
+        v2 = float(sum[2] / (6 * area))
         centroides.append([z, v1, v2])
 
     va = float((centroides[0][0] + centroides[2][0]) / 2)
