@@ -39,7 +39,7 @@ def oertel(A, b, d,
             A, b, cp, z_vals, N_hip, d, N, tol=tol, batch= batch, target_mb=target_mb)
         #que tan central es el punto
 
-        print(f"Punto{cp[:1]} -> F: {F_cp:.4f}")
+        print(f"Punto{cp[:1]} -> F: {F_cp}")
 
         #guardamos el mejor de los 4 puntos
         if F_cp > bestF:
