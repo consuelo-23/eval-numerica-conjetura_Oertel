@@ -20,6 +20,15 @@ def oertel(A, b, d,
            batch = None,
            target_mb = None):
     
+    """
+    Busca un centerpoint aproximado maximizando:
+        F(cp) = min_u  [ sum_z min(Vol(S_z ∩ H_u^+), Vol(S_z ∩ H_u^-)) ] / sum_z Vol(S_z)
+
+    Devuelve:
+    bestCP : mejor centerpoint
+    bestF : valor de F(bestCP)
+    bestU : dirección que produce el peor corte para bestCP
+    """
     #--------- búsqueda de centerpoint sobre puntos específicos ------
     bestF = -np.inf
     bestCP = None
@@ -39,7 +48,7 @@ def oertel(A, b, d,
             A, b, cp, z_vals, N_hip, d, N, tol=tol, batch= batch, target_mb=target_mb)
         #que tan central es el punto
 
-        print(f"Punto{cp[:1]} -> F: {F_cp}")
+        print(f"Punto{cp} -> F: {F_cp}")
 
         #guardamos el mejor de los 4 puntos
         if F_cp > bestF:
@@ -50,11 +59,20 @@ def oertel(A, b, d,
     return bestCP, float(bestF), bestU
 
 
-        
+def linea_de_ensayo(v1, va, N_Muestras = 50):
+    v1 = np.asarray(v1)
+    va = np.asarray(va)
+
     
+    t = np.linspace(0,1,N_Muestras) 
+    #retorna números equitativamente espaciados entre 0 y 1
 
-
-
+    muestras = []
+    for i in t:
+        muestra = (1-i)*v1 + i*va
+        muestras.append(muestra)
+    return muestras
+    
 
 
 

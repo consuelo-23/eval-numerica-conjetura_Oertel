@@ -52,7 +52,7 @@ def generate_convex_hull(verts : np.ndarray , tol_jitter : float = 1e-12):
 
 def random_vertices_by_fiber(z_vals, d:int, n_per_z:int) -> np.ndarray:
   """
-  Genera puntos aleatorios por fibra    --------> qué es una fibra?
+  Genera puntos aleatorios por fibra
 
   Parámetros
   ----------

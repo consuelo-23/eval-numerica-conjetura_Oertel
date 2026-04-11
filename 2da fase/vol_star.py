@@ -131,6 +131,7 @@ def ratio_cp(A, b, cp, z_vals, N_hip, d, N, tol=1e-9, batch=None, target_mb=None
                 inside = np.all((p @ Ap.T) <= (b_shift + tol), axis=1) #verifica qué puntos caen dentro
                 #para los que caen dentro, en qué lado están
                 if inside.any():
+                    #verifica a qué lado del centerpoint queda cada punto
                     side_val = (p[inside] - p_cp) @ u  # (k,)
                     acc_pos += int((side_val >= 0).sum())
                     acc_neg += int((side_val < 0).sum())
