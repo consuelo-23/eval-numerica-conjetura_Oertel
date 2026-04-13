@@ -16,7 +16,7 @@ def get_centerpoints(verts):
 
     for z in [0,1,2]:
         filtro = (verts[:,0] ==z) #filtro para quedarnos sólo con los puntos de la slice z
-        puntos__ = verts[filtro][:,1:] #puntos de la slice z, sin la coordenada entera
+        puntos__ = verts[filtro][:,1:] #sin la coordenada entera
         
         hull = ConvexHull(puntos__)
         puntos = puntos__[hull.vertices]

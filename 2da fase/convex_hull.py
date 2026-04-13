@@ -36,7 +36,7 @@ def generate_convex_hull(verts : np.ndarray , tol_jitter : float = 1e-12):
     #Fallback. metemos jitter sólo en las coordenadas continuas (columna 1: )
     v = verts.copy()
     if v.shape[1]>=2:
-      noise = tol_jitter * np.random.randn(*v[:,1:].shape) #todas las filas y desde la segunda columna en adelante
+      noise = tol_jitter * np.random.randn(*v[:,1:].shape) #todas las filas y desde la segunda columna en adelante (o sea, las coordenadas continuas)
       v[:, 1:] = np.clip(v[:, 1:] + noise, 0.0, 1.0)
     
     hull = ConvexHull(v, qhull_options = "QJ")
