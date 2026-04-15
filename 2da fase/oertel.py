@@ -3,8 +3,7 @@ import numpy as np
 from numpy.linalg import norm  # por si lo usas en otros lugares
 from typing import List, Tuple, Optional
 
-from rejection_sampling import EstimateVolumeRejection  # si ya no lo usas, lo puedes borrar
-from vol_star import ratio_cp
+from vol_star import estimar_ratio
 
 
 def _inside(A: np.ndarray, b: np.ndarray, x: np.ndarray, tol: float = 1e-9) -> bool:
@@ -44,7 +43,7 @@ def oertel(A, b, d,
 
         #evaluar el ratio de oertel
 
-        F_cp, u_cp = ratio_cp(
+        F_cp, u_cp = estimar_ratio(
             A, b, cp, z_vals, N_hip, d, N, tol=tol, batch= batch, target_mb=target_mb)
         #que tan central es el punto
 
