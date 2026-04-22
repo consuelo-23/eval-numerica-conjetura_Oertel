@@ -26,6 +26,7 @@ def h_to_v_rep(A, b):
             for v in vertices:
                 if np.allclose(v, punto):
                     new_point = False
+                    break
             if new_point:
                 vertices.append(punto)
         
