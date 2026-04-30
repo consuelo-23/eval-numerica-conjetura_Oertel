@@ -1,6 +1,8 @@
 import numpy as np
 from itertools import combinations
 from Hit_and_Run import CentroChebyshev
+import bisect
+
 
 
 def h_to_v_rep(A, b):
@@ -35,15 +37,41 @@ def h_to_v_rep(A, b):
         
     return np.asarray(vertices)
 
+# Tengo que sacar los vertices por cada slice
+# Luego los ordeno
 
-def ordenar_vertices(A, b):
+def ordenar_vertices(vertices_slice):
     """
     ordenar los vértices para poder ocupar la fórmula en la sgte función
+    input:
+        vertices_slice : vértices por correspondientes a cada slice
     """
     center, radio = CentroChebyshev(A,b)
 
-    vertices = h_to_v_rep(A,b)
-    
+
+    # Sacarle vector a los vértices desde el centro hasta cada uno
+    vectores = []
+    for i in vertices_slice:
+        u_i = vertices_slice[i] - CentroChebyshev
+        vectores.append(u_i)
+
+    # Ahora calcular el ángulo respecto al centro con cada uno de los vectores
+    u_ref = vectores[0]
+    puntos_ordenados_izq = {}
+    puntos_ordenados_der = {}
+    vectores_a_ordenar = vectores[1:] # Sublista con los que hay que ordenar
+    for i in vectores_a_ordenar:
+        # Siguiendo la fórmula theta_i = arccos( <u_ref, u_i> / (||u_ref|| ||u_i||) )
+        theta_i = np.arccos(np.dot(u_ref, i)/(np.linalg.norm(u_ref) * np.linalg.norm(i)))
+
+        #determinar si quedó a la izquiera o la derecha
+        det = u_ref[0]*i[1] - u_ref[1]*i[0]
+        if det >= 0:
+            puntos_ordenados_izq.update({i : theta_i})
+        else:
+            puntos_ordenados_der.update({i : theta_i})
+        
+        
     return
 
 
