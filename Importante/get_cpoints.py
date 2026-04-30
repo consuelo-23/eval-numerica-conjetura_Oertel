@@ -42,10 +42,15 @@ def h_to_v_rep(A, b):
 
 def ordenar_vertices(vertices_slice):
     """
-    ordenar los vértices para poder ocupar la fórmula en la sgte función
+    ordenar los vértices (de cada slice) para poder ocupar la fórmula en la sgte función
     input:
         vertices_slice : vértices por correspondientes a cada slice
     """
+    # Provisoriamente voy a sacarles la envoltura convexa, a ver qué pasa
+    hull = ConvexHull(vertices_slice, qhull_options = "QJ")
+    A = hull.equations[:, :-1]
+    b = -hull.equations[:, -1]
+    
     center, radio = CentroChebyshev(A,b)
 
 
