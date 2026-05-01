@@ -1,8 +1,6 @@
 import numpy as np
 from itertools import combinations
 from Hit_and_Run import CentroChebyshev
-import bisect
-
 
 
 def h_to_v_rep(A, b):
@@ -20,8 +18,11 @@ def h_to_v_rep(A, b):
         A_sub = A[list(indice)]
         b_sub = b[list(indice)]
         
-        # Falta chequear que A_Sub es invertible
-        
+        # Chequear que A_Sub es invertible
+        if A_sub.shape[0] != A_sub.shape[1] or np.linalg.det(A_sub) == 0:
+            continue        
+
+        # Obtener el valor de x
         punto = np.linalg.solve(A_sub, b_sub)
 
         # Verificar validez del punto encontrado
@@ -46,24 +47,34 @@ def ordenar_vertices(vertices_slice):
     input:
         vertices_slice : vértices por correspondientes a cada slice
     """
-    # Provisoriamente voy a sacarles la envoltura convexa, a ver qué pasa
-    hull = ConvexHull(vertices_slice, qhull_options = "QJ")
-    A = hull.equations[:, :-1]
-    b = -hull.equations[:, -1]
-    
-    center, radio = CentroChebyshev(A,b)
+    # Trabajamos como array
+    vertices_slice = np.asarray(vertices_slice)
+    # Primero me quedo con las coordenadas (x,y)
+    vertices = vertices_slice[:, 1:]
+
+    # Elegir un centro
+    # Podría ser el centro de Chebyshev, pero necesito su H representation para eso
+    # Así que por mientra trabajo con el promedio de los puntos
+    # Que es un punto interior por lo menos
+    centro = np.asarray(np.mean(vertices, axis = 0))
 
 
     # Sacarle vector a los vértices desde el centro hasta cada uno
     vectores = []
-    for i in vertices_slice:
-        u_i = vertices_slice[i] - CentroChebyshev
+    for i in vertices:
+        u_i = i - centro
         vectores.append(u_i)
 
     # Ahora calcular el ángulo respecto al centro con cada uno de los vectores
+    # El primero vector en de referencia
     u_ref = vectores[0]
-    puntos_ordenados_izq = {}
-    puntos_ordenados_der = {}
+
+    # Como arccos me entrega valores entre [0,pi], voy a ordenarlos por los puntos a su izquierda
+    # y los puntos a su derecha, de menor a mayor ángulo
+    # Luego los puedo juntar en una lista
+    puntos_izq = {}
+    puntos_der = {}
+    
     vectores_a_ordenar = vectores[1:] # Sublista con los que hay que ordenar
     for i in vectores_a_ordenar:
         # Siguiendo la fórmula theta_i = arccos( <u_ref, u_i> / (||u_ref|| ||u_i||) )
@@ -72,20 +83,21 @@ def ordenar_vertices(vertices_slice):
         #determinar si quedó a la izquiera o la derecha
         det = u_ref[0]*i[1] - u_ref[1]*i[0]
         if det >= 0:
-            puntos_ordenados_izq.update({i : theta_i})
+            puntos_izq.update({tuple(i) : theta_i})
         else:
-            puntos_ordenados_der.update({i : theta_i})
+            puntos_der.update({tuple(i) : theta_i})
+
+    # Ahora hay que sortear los diccionarios según ángulo
+    puntos_ordenados_izq = dict(sorted(puntos_izq.items(), key = lambda item : item[1]))
+    puntos_ordenados_der = dict(sorted(puntos_der.items(), key = lambda item : item[1]))
+
+    # Y juntar las listas
+    puntos_ordenados = []
+
+    for i in puntos_ordenados_izq.keys():
+        puntos_ordenados.append(i)
+    for i in reversed(puntos_ordenados_der.keys()):
+        puntos_ordenados.append(i)
+       
         
-        
-    return
-
-
-
-def get_centerpoints(A, b):
-    """
-    obtener los candidatos a centerpoints estratégicos utilizando la fórmula de showlace
-    """
-    return
-
-
-
+    return puntos_ordenados
