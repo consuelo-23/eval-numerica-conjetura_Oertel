@@ -72,7 +72,7 @@ def ordenar_vertices(vertices_slice):
     # Como arccos me entrega valores entre [0,pi], voy a ordenarlos por los puntos a su izquierda
     # y los puntos a su derecha, de menor a mayor ángulo
     # Luego los puedo juntar en una lista
-    puntos_izq = {}
+    puntos_izq = {tuple(u_ref) : 0}
     puntos_der = {}
     
     vectores_a_ordenar = vectores[1:] # Sublista con los que hay que ordenar
