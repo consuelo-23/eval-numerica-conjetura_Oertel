@@ -18,7 +18,7 @@ def h_to_v_rep(A, b):
         A_sub = A[list(indice)]
         b_sub = b[list(indice)]
         
-        # Chequear que A_Sub es invertible
+        # Chequear que A_Sub es invertiblee
         if A_sub.shape[0] != A_sub.shape[1] or np.linalg.det(A_sub) == 0:
             continue        
 
