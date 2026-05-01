@@ -136,3 +136,6 @@ def EstimateVolumeConvex(A, b, samples=10**7, tol = 0.9999):
 
     #tiempo_total = time.time() - start_time
     return vol #tiempo_total
+    
+    
+print("Hello")
