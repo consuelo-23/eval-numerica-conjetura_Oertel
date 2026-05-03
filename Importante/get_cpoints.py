@@ -1,11 +1,12 @@
 import numpy as np
 from itertools import combinations
-from Hit_and_Run import CentroChebyshev
 
-
-def h_to_v_rep(A, b):
+def h_to_v_rep(A, b, tol = 1e-12):
     """
     Obtiene la V-representation de un cuerpo convexo a partir de la H-representation
+
+    Input
+    --------------
     A : Matriz de coeficientes (m x n)
     b : Vector (m)
     """
@@ -19,14 +20,14 @@ def h_to_v_rep(A, b):
         b_sub = b[list(indice)]
         
         # Chequear que A_Sub es invertiblee
-        if A_sub.shape[0] != A_sub.shape[1] or np.linalg.det(A_sub) == 0:
+        if A_sub.shape[0] != A_sub.shape[1] or np.linalg.det(A_sub) <= tol:
             continue        
 
         # Obtener el valor de x
         punto = np.linalg.solve(A_sub, b_sub)
 
         # Verificar validez del punto encontrado
-        if np.all(np.dot(A, punto) <= b):
+        if np.all(np.dot(A, punto) <= b + tol):
             # Verificar unicidad del punto
             new_point = True
             for v in vertices:
@@ -44,8 +45,10 @@ def h_to_v_rep(A, b):
 def ordenar_vertices(vertices_slice):
     """
     ordenar los vértices (de cada slice) para poder ocupar la fórmula en la sgte función
-    input:
-        vertices_slice : vértices por correspondientes a cada slice
+
+    Input
+    -----------
+    vertices_slice : vértices por correspondientes a cada slice
     """
     # Trabajamos como array
     vertices_slice = np.asarray(vertices_slice)
@@ -101,3 +104,22 @@ def ordenar_vertices(vertices_slice):
        
         
     return puntos_ordenados
+
+
+def get_points(vertices, ):
+    """
+    Obtener los puntos candidatos a centerpoint
+    
+    Input
+    ----------------
+    vertices : vertices previamente ordenados
+    """
+
+    #me confundí con las dimensiones de lo que estoy trabajando
+
+    #deberían ser coordenadas 3d? para representar la posición
+    #relativa al conjunto entero?
+
+    #o coordenadas 2d y proceso por tandas la función
+
+    
