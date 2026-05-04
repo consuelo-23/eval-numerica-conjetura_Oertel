@@ -106,20 +106,35 @@ def ordenar_vertices(vertices_slice):
     return puntos_ordenados
 
 
-def get_points(vertices, ):
+def get_points(vertices, ): ######## Primer borrador de la función
     """
     Obtener los puntos candidatos a centerpoint
     
     Input
     ----------------
-    vertices : vertices previamente ordenados
+    vertices : vertices previamente ordenados en 2d
+
+    Output
+    ----------------
+    punto candidato a centerpoint
     """
+    n = vertices.shape[0]
+    area = 0
+    sum = [0,0]
+    v1=0
+    v2=0
+    for i in range(n):
+        z0, x0, y0 = vertices[i]
+        z1, x1, y1 = vertices[(i + 1) % n]
 
-    #me confundí con las dimensiones de lo que estoy trabajando
+        A = (x0 * y1 - x1 * y0)
+        area += A
 
-    #deberían ser coordenadas 3d? para representar la posición
-    #relativa al conjunto entero?
+        v1 += A * (x0 + x1)
+        v2 += A * (y0 + y1)
 
-    #o coordenadas 2d y proceso por tandas la función
+    area *= 0.5
+    v1 = float(v1 / (6 * area))
+    v2 = float(v2 / (6 * area))
 
-    
+    return np.asarray([v1, v2])
