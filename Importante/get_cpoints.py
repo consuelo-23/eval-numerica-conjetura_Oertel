@@ -20,7 +20,7 @@ def h_to_v_rep(A, b, tol = 1e-12):
         b_sub = b[list(indice)]
         
         # Chequear que A_Sub es invertiblee
-        if A_sub.shape[0] != A_sub.shape[1] or np.linalg.det(A_sub) <= tol:
+        if A_sub.shape[0] != A_sub.shape[1] or abs(np.linalg.det(A_sub)) <= tol:
             continue        
 
         # Obtener el valor de x
@@ -42,7 +42,7 @@ def h_to_v_rep(A, b, tol = 1e-12):
 # Tengo que sacar los vertices por cada slice
 # Luego los ordeno
 
-def ordenar_vertices(vertices_slice):
+def ordenar_vertices(vertices_slice, z):
     """
     ordenar los vértices (de cada slice) para poder ocupar la fórmula en la sgte función
 
@@ -98,12 +98,17 @@ def ordenar_vertices(vertices_slice):
     puntos_ordenados = []
 
     for i in puntos_ordenados_izq.keys():
-        puntos_ordenados.append(i)
+        punto_original = np.array(i) + centro
+        punto_3d = np.array([z, punto_original[0], punto_original[1]])
+        puntos_ordenados.append(punto_3d)
     for i in reversed(puntos_ordenados_der.keys()):
-        puntos_ordenados.append(i)
+        punto_original = np.array(i) + centro
+        punto_3d = np.array([z, punto_original[0], punto_original[1]])
+        puntos_ordenados.append(punto_3d)
        
         
-    return puntos_ordenados
+    return np.asarray(puntos_ordenados)
+    
 
 
 def get_points(vertices, z): ######## Primer borrador de la función
