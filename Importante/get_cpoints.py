@@ -1,5 +1,9 @@
 import numpy as np
 from itertools import combinations
+from convex_hull import generate_convex_hull
+import matplotlib.pyplot as plt
+from oertel import linea_de_ensayo
+
 
 def h_to_v_rep(A, b, tol = 1e-12):
     """
@@ -51,10 +55,8 @@ def ordenar_vertices(vertices_slice, z):
     vertices_slice : vértices por correspondientes a cada slice
     """
     # Trabajamos como array
-    vertices_slice = np.asarray(vertices_slice)
-    # Primero me quedo con las coordenadas (x,y)
-    vertices = vertices_slice[:, 1:]
-
+    vertices = np.asarray(vertices_slice)
+    
     # Elegir un centro
     # Podría ser el centro de Chebyshev, pero necesito su H representation para eso
     # Así que por mientra trabajo con el promedio de los puntos
@@ -72,9 +74,9 @@ def ordenar_vertices(vertices_slice, z):
     # El primero vector en de referencia
     u_ref = vectores[0]
 
-    # Como arccos me entrega valores entre [0,pi], voy a ordenarlos por los puntos a su izquierda
+    # Como arccos me entrega valores entre [0,pi], se ordenan por los puntos a su izquierda
     # y los puntos a su derecha, de menor a mayor ángulo
-    # Luego los puedo juntar en una lista
+    # Luego se pueden juntar en una lista
     puntos_izq = {tuple(u_ref) : 0}
     puntos_der = {}
     
@@ -111,9 +113,9 @@ def ordenar_vertices(vertices_slice, z):
     
 
 
-def get_points(vertices, z): ######## Primer borrador de la función
+def get_points(vertices, z): 
     """
-    Obtener los puntos candidatos a centerpoint
+    Obtiene los puntos candidatos a centerpoint
     
     Input
     ----------------
@@ -144,4 +146,80 @@ def get_points(vertices, z): ######## Primer borrador de la función
     v2 = float(v2 / (6 * area))
 
     return np.asarray([z, v1, v2])
+
+
+
+
+
+"""
+Ahora a construir la gran función
+"""
+
+def obtener_candidatos(vertices, k=5):
+    """
+    juntando todas la funciones en el gran output
     
+    -------------------
+    Parámetros:
+    vértices de la figura
+
+    -------------------
+    Retorna:
+    candidatos a centerpoint para procesar después con Oertel
+    """
+
+    
+
+    candidatos = []
+
+    # Formar Q
+    Q = []
+    P_0 = vertices[np.isclose(vertices[:, 0], 0)]
+    P_2 = vertices[np.isclose(vertices[:, 0], 2)]
+
+    for i in P_0:
+        for j in P_2:
+            q = (i + j)/2
+            Q.append(q)
+    Q = np.asarray(Q)
+
+
+    # Proceso por slice
+    for z in [0, 1, 2]:
+        grupo = vertices[np.isclose(vertices[:, 0], z)]
+
+        print("slice:", z)
+        print(grupo)
+    
+        if z == 1:
+            grupo = np.vstack([grupo, Q])
+
+
+        # Nos quedamos con las coordenadas (x,y)
+        grupo = grupo[:, 1:]
+        
+        A, b = generate_convex_hull(grupo)
+        verts = h_to_v_rep(A,b)
+
+
+        ordenados = ordenar_vertices(verts, z)
+        
+        x = [v[1] for v in ordenados]
+        y = [v[2] for v in ordenados]
+
+        plt.plot(x, y, marker="o")
+        plt.show()
+        print(ordenados)
+
+        candidato = get_points(ordenados, z)
+        candidatos.append(candidato)
+        
+
+    va = (candidatos[0] + candidatos[2])/2
+    candidatos.append(va)
+
+
+    muestras = linea_de_ensayo(candidatos[1], candidatos[3])
+    candidatos.append(muestras)
+
+    return candidatos

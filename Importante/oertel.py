@@ -64,7 +64,7 @@ def linea_de_ensayo(v1, va, N_Muestras = 50):
 
     
     t = np.linspace(0,1,N_Muestras) 
-    #retorna números equitativamente espaciados entre 0 y 1
+    # Retorna números equitativamente espaciados entre 0 y 1
 
     muestras = []
     for i in t:
