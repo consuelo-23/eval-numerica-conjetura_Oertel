@@ -196,6 +196,8 @@ def estimar_ratio(A, b, cp, z_vals, N_hip, d, N, tol=1e-9, batch=None, target_mb
         vols[int(z)] = _fiber_vol_est(d, A, b, z, N, tol=tol, batch=batch, target_mb=target_mb)
 
     vol_total = sum(vols.values())
+
+    
     if vol_total <= 0:
         # No hay volumen, devolvemos ratio 0 y un u neutro
         return 0.0, np.zeros(d, dtype=float)

@@ -103,6 +103,7 @@ def ordenar_vertices(vertices_slice, z):
         punto_original = np.array(i) + centro
         punto_3d = np.array([z, punto_original[0], punto_original[1]])
         puntos_ordenados.append(punto_3d)
+        
     for i in reversed(puntos_ordenados_der.keys()):
         punto_original = np.array(i) + centro
         punto_3d = np.array([z, punto_original[0], punto_original[1]])
