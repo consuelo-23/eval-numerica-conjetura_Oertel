@@ -5,6 +5,20 @@ def _inside_(point, vertices, z):
     
     return
 
+def area_por_slice(grupo, z):
+    grupo = np.asarray(grupo)
+    n = grupo.shape[0]
+    area = 0
+
+    for i in range(n):
+        x0, y0 = grupo[i]
+        x1, y1 = grupo[(i + 1) % n]
+
+        A = (x0 * y1 - x1 * y0)
+        area += A
+
+    area *= 0.5        
+    return area
 
 
 def area_total(vertices, z_vals = [0,1,2]):
@@ -73,8 +87,15 @@ def ratio(vertices, cp, N_hip = 2000, z_vals = [0,1,2]):
         sum_vol_pos = 0.0
         sum_vol_neg = 0.0
         
+        # Voy cortando por slice
         for z in z_vals:
             z_val = float(int(z))
             acc_pos = 0
             acc_neg = 0
+
+            # Me quedo con (x,y)
+            grupo = vertices(np.isclose(vertices[:,0],z))
+            grupo = grupo[:,1:]
+
+
             

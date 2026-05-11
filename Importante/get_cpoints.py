@@ -114,7 +114,7 @@ def ordenar_vertices(vertices_slice, z):
     
 
 
-def get_points(vertices, z): 
+def get_centroid(vertices, z): 
     """
     Obtiene los puntos candidatos a centerpoint
     
@@ -201,7 +201,7 @@ def obtener_candidatos(vertices, k=5):
         
         A, b = generate_convex_hull(grupo)
         verts = h_to_v_rep(A,b)
-
+        #QuickHUl devuelve vertices, averiguar cómo
 
         ordenados = ordenar_vertices(verts, z)
         
@@ -212,15 +212,16 @@ def obtener_candidatos(vertices, k=5):
         plt.show()
         print(ordenados)
 
-        candidato = get_points(ordenados, z)
+        candidato = get_centroid(ordenados, z)
         candidatos.append(candidato)
         
 
     va = (candidatos[0] + candidatos[2])/2
+    #chequear que sean distintos va y candidatos[1]
     candidatos.append(va)
 
 
     muestras = linea_de_ensayo(candidatos[1], candidatos[3])
     candidatos.append(muestras)
 
-    return candidatos
+    return candidatos, ordenados
