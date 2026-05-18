@@ -2,7 +2,7 @@
 import numpy as np
 from numpy.linalg import norm  # por si lo usas en otros lugares
 from typing import List, Tuple, Optional
-
+from vol_star import ratio_cp
 from vol_star import estimar_ratio
 
 

@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def area_2d(grupo, z):
+def area_2d(grupo):
     """
     2D -> 2D
     """
@@ -124,9 +124,10 @@ def ratio(ordenados, cp, Nz = 100, Nd = 100, z_vals = [0,1,2]):
     """
 
     ordenados = np.asarray(ordenados)
-    vol_total = area_total(ordenados)
+    tot_area = abs(area_total(ordenados)) # suma de las áreas de cada slice -> área total
 
-    if vol_total <= 0:
+
+    if tot_area <= 0:
         # No hay volumen, devolvemos ratio 0 y None u
         return 0.0, None
 
@@ -138,9 +139,39 @@ def ratio(ordenados, cp, Nz = 100, Nd = 100, z_vals = [0,1,2]):
     betas = np.linspace(0, np.pi, Nd, endpoint=False)
 
     for alpha in alphas:
+        # ¿Cómo defino los vectores para definir el hiperplano?
         v_z =
 
         for beta in betas:
             v_d =
 
-    return
+
+            u = 
+
+
+            # Parchar el vector en caso de... (no sé para qué casos debo parchar)
+
+            sum_pos_side = 0
+            sum_neg_side = 0
+
+            for z in z_vals:
+                # Extraer el polígono original de la slice z
+                grupo = ordenados[np.isclose(ordenados[:,0], z)][:,1:]
+
+                # Clippear el polígono del lado positivo (H_u^+) y del lado negativo (H_u^-)
+
+                poly_pos = clip_poligono(grupo, z, cp, u)
+                poly_neg = clip_poligono(grupo, z, cp, -u)
+
+                sum_pos_side += abs(area_2d(poly_pos))
+                sum_neg_side += abs(area_2d(poly_neg))
+
+            sum_min_slices = min(sum_pos_side, sum_neg_side)
+
+            ratio = sum_min_slices / tot_area
+
+            if ratio < worst_ratio:
+                worst_ratio = ratio
+                worst_u = u
+    
+    return worst_ratio, worst_u
