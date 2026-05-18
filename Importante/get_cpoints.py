@@ -1,6 +1,6 @@
 import numpy as np
 from itertools import combinations
-from convex_hull import generate_convex_hull
+from scipy.spatial import ConvexHull
 import matplotlib.pyplot as plt
 from oertel import linea_de_ensayo
 
@@ -156,7 +156,7 @@ def get_centroid(vertices, z):
 Ahora a construir la gran función
 """
 
-def obtener_candidatos(vertices, k=5):
+def obtener_candidatos(vertices):
     """
     juntando todas la funciones en el gran output
     
@@ -169,7 +169,6 @@ def obtener_candidatos(vertices, k=5):
     candidatos a centerpoint para procesar después con Oertel
     """
 
-    
 
     candidatos = []
 
@@ -199,11 +198,10 @@ def obtener_candidatos(vertices, k=5):
         # Nos quedamos con las coordenadas (x,y)
         grupo = grupo[:, 1:]
         
-        A, b = generate_convex_hull(grupo)
-        verts = h_to_v_rep(A,b)
-        #QuickHUl devuelve vertices, averiguar cómo
+        hull = ConvexHull(grupo)
+        grupo = grupo[hull.vertices]
 
-        ordenados = ordenar_vertices(verts, z)
+        ordenados = ordenar_vertices(grupo, z)
         
         x = [v[1] for v in ordenados]
         y = [v[2] for v in ordenados]
@@ -217,11 +215,18 @@ def obtener_candidatos(vertices, k=5):
         
 
     va = (candidatos[0] + candidatos[2])/2
+    
     #chequear que sean distintos va y candidatos[1]
-    candidatos.append(va)
+    if np.allclose(va, candidatos[1]):
+        return candidatos, ordenados
+    
+    else: #si son distintos
+        candidatos.append(va)
 
+        muestras = linea_de_ensayo(candidatos[1], candidatos[3])
+        candidatos.append(muestras)
 
-    muestras = linea_de_ensayo(candidatos[1], candidatos[3])
-    candidatos.append(muestras)
+        return candidatos, ordenados
 
-    return candidatos, ordenados
+    
+    

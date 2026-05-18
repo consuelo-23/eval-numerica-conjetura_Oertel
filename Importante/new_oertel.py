@@ -1,11 +1,11 @@
 # Nueva función para calcular el radio de oertel a partir de los vértices
 import numpy as np
 
-def _inside_(point, vertices, z):
-    
-    return
 
-def area_por_slice(grupo, z):
+def area_2d(grupo, z):
+    """
+    2D -> 2D
+    """
     grupo = np.asarray(grupo)
     n = grupo.shape[0]
     area = 0
@@ -24,6 +24,7 @@ def area_por_slice(grupo, z):
 def area_total(vertices, z_vals = [0,1,2]):
     """
     Retorna el la suma de los volúmenes de cada slice utilizando la fórmula de shoelace
+    3D -> 3D
     """
     sum_area = 0
     for z in z_vals:
@@ -42,15 +43,73 @@ def area_total(vertices, z_vals = [0,1,2]):
             area += A
 
         area *= 0.5
+        area = abs(area)
         sum_area += area
     return sum_area
 
 
-
-
-def ratio(vertices, cp, N_hip = 2000, z_vals = [0,1,2]):
+def lado_hiperplano(punto, z, cp, u):
     """
-    Estima F(cp) y la dirección u* que da el peor corte:
+    determina de qué lado del hiperplano está un punto
+    (izq positivo, derecha negativo)
+    
+    input
+    -------------------
+
+    punto : vertice del ConvexHull
+    
+    z : z de la slice
+
+    cp : centerpoint a comparación
+    
+    u : dirección hiperplano
+    """
+    x_prima = np.array([z, punto[0], punto[1]])
+
+    return np.dot(u, x_prima - cp)
+
+
+def interseccion(p0, p1, val0, val1):
+    """
+    determina la intersección de una arista al hiperplano
+    """
+    t = val0/(val0-val1)
+
+    return p0 + t * (p1 - p0)
+
+def clip_poligono(poligono, z, cp, u):
+
+    poligono = np.asarray(poligono, dtype = float)
+
+    n = len(poligono)
+
+    new = []
+
+    for i in range(len(poligono)):
+        p_actual = poligono[i]
+        p_next = poligono[(i+1) % n]
+
+        val_actual = lado_hiperplano(p_actual, z, cp, u)
+        val_next = lado_hiperplano(p_next, z, cp, u)
+
+        inter = interseccion(p_actual, p_next, val_actual, val_next)
+
+        if val_actual >=0 and val_next >=0:
+            new.append(p_next)
+
+        elif val_actual >= 0 and val_next <0:
+            new.append(inter)
+        
+        elif val_actual <0 and val_next >=0:
+            new.append(inter)
+            new.append(p_next)
+        
+    return new
+
+
+def ratio(ordenados, cp, Nz = 100, Nd = 100, z_vals = [0,1,2]):
+    """
+    Obtiene F(cp) y la dirección u* que da el peor corte:
 
         F(cp) = min_u [ sum_z min(Vol(S_z ∩ H_u^+), Vol(S_z ∩ H_u^-)) ] / sum_z Vol(S_z),
 
@@ -64,38 +123,24 @@ def ratio(vertices, cp, N_hip = 2000, z_vals = [0,1,2]):
         Dirección (normal en coords continuas) que logra el mínimo.
     """
 
-    vertices = np.asarray(vertices)
-    vol_total = area_total(vertices)
+    ordenados = np.asarray(ordenados)
+    vol_total = area_total(ordenados)
 
     if vol_total <= 0:
-        # No hay volumen, devolvemos ratio 0 y un u neutro
-        return 0.0, np.zeros(d, dtype=float)
+        # No hay volumen, devolvemos ratio 0 y None u
+        return 0.0, None
 
-    worst_ratio = 1.0  # buscamos el mínimo sobre direcciones
+    worst_ratio = 1.0  # Buscamos el mínimo sobre direcciones
     worst_u = None
 
-    for _ in range(int(N_hip)):
-        # Normal aleatoria en R^d (sólo sobre coordenadas continuas)
-        
-        u = np.random.randn(d) # Dirección aleatoria no normalizada
-        nu = np.linalg.norm(u)
-        if nu < 1e-15:
-            continue # Se salta al sgte pq es muy chiquito
-        u /= nu #Normalizado
+    # Vamos a sacar los ángulos uniformemente
+    alphas = np.linspace(0, np.pi, Nz, endpoint=False) #excluyendo el dígito final
+    betas = np.linspace(0, np.pi, Nd, endpoint=False)
 
-        # Para esta dirección, estimamos sum_z min(Vol^+, Vol^-)        
-        sum_vol_pos = 0.0
-        sum_vol_neg = 0.0
-        
-        # Voy cortando por slice
-        for z in z_vals:
-            z_val = float(int(z))
-            acc_pos = 0
-            acc_neg = 0
+    for alpha in alphas:
+        v_z =
 
-            # Me quedo con (x,y)
-            grupo = vertices(np.isclose(vertices[:,0],z))
-            grupo = grupo[:,1:]
+        for beta in betas:
+            v_d =
 
-
-            
+    return
