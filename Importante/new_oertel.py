@@ -91,16 +91,16 @@ def clip_poligono(poligono, z, cp, u):
 
         val_actual = lado_hiperplano(p_actual, z, cp, u)
         val_next = lado_hiperplano(p_next, z, cp, u)
-
-        inter = interseccion(p_actual, p_next, val_actual, val_next)
-
+        
         if val_actual >=0 and val_next >=0:
             new.append(p_next)
 
         elif val_actual >= 0 and val_next <0:
+            inter = interseccion(p_actual, p_next, val_actual, val_next)
             new.append(inter)
         
         elif val_actual <0 and val_next >=0:
+            inter = interseccion(p_actual, p_next, val_actual, val_next)
             new.append(inter)
             new.append(p_next)
         
@@ -139,17 +139,10 @@ def ratio(ordenados, cp, Nz = 100, Nd = 100, z_vals = [0,1,2]):
     betas = np.linspace(0, np.pi, Nd, endpoint=False)
 
     for alpha in alphas:
-        # ¿Cómo defino los vectores para definir el hiperplano?
-        v_z =
 
         for beta in betas:
-            v_d =
-
-
-            u = 
-
-
-            # Parchar el vector en caso de... (no sé para qué casos debo parchar)
+            
+            u = (np.cos(beta), np.cos(alpha) * np.sin(beta), np.sin(alpha)*np.sin(beta))
 
             sum_pos_side = 0
             sum_neg_side = 0
@@ -161,17 +154,74 @@ def ratio(ordenados, cp, Nz = 100, Nd = 100, z_vals = [0,1,2]):
                 # Clippear el polígono del lado positivo (H_u^+) y del lado negativo (H_u^-)
 
                 poly_pos = clip_poligono(grupo, z, cp, u)
-                poly_neg = clip_poligono(grupo, z, cp, -u)
-
                 sum_pos_side += abs(area_2d(poly_pos))
-                sum_neg_side += abs(area_2d(poly_neg))
 
+            sum_neg_side = tot_area - sum_pos_side
             sum_min_slices = min(sum_pos_side, sum_neg_side)
 
             ratio = sum_min_slices / tot_area
 
             if ratio < worst_ratio:
                 worst_ratio = ratio
-                worst_u = u
+
+                # Actualizar u según qué lado se tomó
+                if sum_pos_side <= sum_neg_side:
+                    worst_u = u
+                else:
+                    worst_u = -u
+
     
     return worst_ratio, worst_u
+
+
+def new_oertel(ordenados, puntos_test, z_vals = [0,1,2], Nz= 100, Nd = 100):
+    """
+    Busca un centerpoint aproximado maximizando:
+        F(cp) = min_u  [ sum_z min(Vol(S_z ∩ H_u^+), Vol(S_z ∩ H_u^-)) ] / sum_z Vol(S_z)
+
+    Devuelve:
+    bestCP : mejor centerpoint
+    bestF : valor de F(bestCP)
+    bestU : dirección que produce el peor corte para bestCP
+    """
+
+    #--------- búsqueda de centerpoint sobre puntos específicos ------
+    bestF = -np.inf
+    bestCP = None
+    bestU = None
+    
+
+    for candidato in puntos_test: #iterar sobre los centerpoints candidatos
+        cp = np.asarray(candidato, dtype = float) #verificar que sea array
+
+        #evaluar el ratio de oertel
+
+        F_cp, u_cp = ratio(ordenados, cp)
+        #que tan central es el punto
+
+        print(f"Punto{cp} -> F: {F_cp}")
+
+        #guardamos el mejor de los 4 puntos
+        if F_cp > bestF:
+            bestF = float(F_cp)
+            bestCP = cp.copy()
+            bestU = np.asarray(u_cp, dtype = float)
+        
+    return bestCP, float(bestF), bestU
+
+
+def linea_de_ensayo(v1, va, N_Muestras = 51):
+    v1 = np.asarray(v1)
+    va = np.asarray(va)
+
+    
+    t = np.linspace(0,1,N_Muestras) 
+    # Retorna números equitativamente espaciados entre 0 y 1
+
+    muestras = []
+    for i in t:
+        muestra = (1-i)*v1 + i*va
+        muestras.append(muestra)
+        
+    return muestras
+    

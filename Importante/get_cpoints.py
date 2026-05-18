@@ -2,7 +2,7 @@ import numpy as np
 from itertools import combinations
 from scipy.spatial import ConvexHull
 import matplotlib.pyplot as plt
-from oertel import linea_de_ensayo
+from new_oertel import linea_de_ensayo
 
 
 def h_to_v_rep(A, b, tol = 1e-12):

@@ -58,20 +58,7 @@ def oertel(A, b, d,
     return bestCP, float(bestF), bestU
 
 
-def linea_de_ensayo(v1, va, N_Muestras = 51):
-    v1 = np.asarray(v1)
-    va = np.asarray(va)
 
-    
-    t = np.linspace(0,1,N_Muestras) 
-    # Retorna números equitativamente espaciados entre 0 y 1
-
-    muestras = []
-    for i in t:
-        muestra = (1-i)*v1 + i*va
-        muestras.append(muestra)
-    return muestras
-    
 
 
 
