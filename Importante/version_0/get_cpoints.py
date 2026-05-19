@@ -1,7 +1,6 @@
 import numpy as np
 from itertools import combinations
 from scipy.spatial import ConvexHull
-import matplotlib.pyplot as plt
 from new_oertel import linea_de_ensayo
 
 
@@ -215,7 +214,7 @@ def obtener_candidatos(vertices):
             Q.append(q)
     Q = np.asarray(Q)
 
-
+    ordenados_todos = []
     # Proceso por slice
     for z in [0, 1, 2]:
         grupo = vertices[np.isclose(vertices[:, 0], z)]
@@ -226,7 +225,6 @@ def obtener_candidatos(vertices):
         if z == 1:
             grupo = np.vstack([grupo, Q])
 
-
         # Nos quedamos con las coordenadas (x,y)
         grupo = grupo[:, 1:]
         
@@ -234,13 +232,7 @@ def obtener_candidatos(vertices):
         grupo = grupo[hull.vertices]
 
         ordenados = ordenar_vertices(grupo, z)
-        
-        x = [v[1] for v in ordenados]
-        y = [v[2] for v in ordenados]
-
-        plt.plot(x, y, marker="o")
-        plt.show()
-        print(ordenados)
+        ordenados_todos.append(ordenados)
 
         candidato = get_centroid(ordenados, z)
         candidatos.append(candidato)
@@ -250,7 +242,7 @@ def obtener_candidatos(vertices):
     
     #chequear que sean distintos va y candidatos[1]
     if np.allclose(va, candidatos[1]):
-        return candidatos, ordenados
+        return candidatos, ordenados_todos
     
     else: #si son distintos
         candidatos.append(va)

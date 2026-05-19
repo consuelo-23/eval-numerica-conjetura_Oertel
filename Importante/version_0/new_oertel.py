@@ -224,4 +224,3 @@ def linea_de_ensayo(v1, va, N_Muestras = 51):
         muestras.append(muestra)
         
     return muestras
-    
