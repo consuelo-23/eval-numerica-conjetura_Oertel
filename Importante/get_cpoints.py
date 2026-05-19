@@ -5,6 +5,44 @@ import matplotlib.pyplot as plt
 from new_oertel import linea_de_ensayo
 
 
+
+def random_vertices_by_fiber(z_vals, d:int, n_per_z:int) -> np.ndarray:
+  """
+  Genera puntos aleatorios por fibra
+
+  Parámetros
+  ----------
+  z_vals : escalar o iterable de ints/floats
+    valores de z (fibras discretas)
+  d : int
+    dimensión continua
+  n_per_z : int
+    número de puntos a generar por cada fibra z
+
+
+  Retorna
+  --------
+  verts : np.ndarray de shape (len(z_vals)*n_per_z, 1+d)
+    cada fila es (z, p_1, ..., p_d) con p_j ~ U([0,1])
+  """
+
+  #permitir z escalar o lista
+  z_list = [float(z_vals)] if np.isscalar(z_vals) else [float(z) for z in z_vals]
+
+  blocks = []
+  for z in z_list:
+    #puntos continuos en [0,1]^d
+    p = np.random.rand(n_per_z, d)    #(n_per_z, d)
+    #columna z constante
+    zcol = np.full((n_per_z, 1), float(z))    #(n_per_z, 1)
+    #concatenar (z | p)
+    blocks.append(np.hstack([zcol, p]))    #(n_per_z, 1+d)
+
+  verts = np.vstack(blocks).astype(float, copy = False)
+  return verts
+
+
+
 def h_to_v_rep(A, b, tol = 1e-12):
     """
     Obtiene la V-representation de un cuerpo convexo a partir de la H-representation
@@ -149,12 +187,6 @@ def get_centroid(vertices, z):
     return np.asarray([z, v1, v2])
 
 
-
-
-
-"""
-Ahora a construir la gran función
-"""
 
 def obtener_candidatos(vertices):
     """
