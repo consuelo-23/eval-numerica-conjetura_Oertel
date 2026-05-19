@@ -21,7 +21,7 @@ mkdir -p logs
 
 ## 2. Prueba corta interactiva
 
-Antes de mandar muchas tareas a cola, conviene probar una corrida pequena:
+Antes de mandar muchas tareas a cola, conviene probar una corrida pequeña:
 
 ```bash
 python3 -m venv .venv

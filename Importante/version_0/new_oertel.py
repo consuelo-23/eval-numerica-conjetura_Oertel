@@ -207,7 +207,7 @@ def new_oertel(ordenados, puntos_test, z_vals = [0,1,2], Nz= 100, Nd = 100, N_Mu
             if contador_de_indice <=3:
                 indice = contador_de_indice
             else:
-                indice = (contador_de_indice - 3) / N_Muestras
+                indice = (contador_de_indice - 3)
         contador_de_indice += 1
     
     print("Best centerpoint: ", bestCP, "Best F: ", bestF, "Best u: ", bestU, "índice: ", indice)
