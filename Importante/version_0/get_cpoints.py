@@ -1,11 +1,10 @@
 import numpy as np
 from itertools import combinations
 from scipy.spatial import ConvexHull
-from new_oertel import linea_de_ensayo
 
 
 
-def random_vertices_by_fiber(z_vals, d:int, n_per_z:int) -> np.ndarray:
+def random_vertices_by_fiber(z_vals, d:int, n_per_z : int) -> np.ndarray:
   """
   Genera puntos aleatorios por fibra
 
@@ -185,9 +184,23 @@ def get_centroid(vertices, z):
 
     return np.asarray([z, v1, v2])
 
+def linea_de_ensayo(v1, va, N_Muestras = 50):
+    v1 = np.asarray(v1)
+    va = np.asarray(va)
+
+    
+    t = np.linspace(1 / N_Muestras,1,N_Muestras, endpoint=False) 
+    # Retorna números equitativamente espaciados entre 0 y 1
+
+    muestras = []
+    for i in t:
+        muestra = (1-i)*v1 + i*va
+        muestras.append(muestra)
+        
+    return muestras
 
 
-def obtener_candidatos(vertices):
+def obtener_candidatos(vertices, n_muestras = 50):
     """
     juntando todas la funciones en el gran output
     
@@ -218,9 +231,6 @@ def obtener_candidatos(vertices):
     # Proceso por slice
     for z in [0, 1, 2]:
         grupo = vertices[np.isclose(vertices[:, 0], z)]
-
-        print("slice:", z)
-        print(grupo)
     
         if z == 1:
             grupo = np.vstack([grupo, Q])
@@ -247,10 +257,10 @@ def obtener_candidatos(vertices):
     else: #si son distintos
         candidatos.append(va)
 
-        muestras = linea_de_ensayo(candidatos[1], candidatos[3])
-        candidatos.append(muestras)
+        muestras = linea_de_ensayo(candidatos[1], candidatos[3], N_Muestras=n_muestras)
+        candidatos.extend(muestras)
 
-        return candidatos, ordenados
+        return candidatos, ordenados_todos
 
     
     

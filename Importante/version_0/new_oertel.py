@@ -134,15 +134,14 @@ def ratio(ordenados, cp, Nz = 100, Nd = 100, z_vals = [0,1,2]):
     worst_ratio = 1.0  # Buscamos el mínimo sobre direcciones
     worst_u = None
 
-    # Vamos a sacar los ángulos uniformemente
-    alphas = np.linspace(0, np.pi, Nz, endpoint=False) #excluyendo el dígito final
-    betas = np.linspace(0, np.pi, Nd, endpoint=False)
+    # Vamos a sacar los ángulos en 2 for anidados
+    for i in range(Nz):
+        alpha = i * np.pi / Nz
 
-    for alpha in alphas:
-
-        for beta in betas:
+        for j in range(Nd):
+            beta = j * np.pi / Nd
             
-            u = (np.cos(beta), np.cos(alpha) * np.sin(beta), np.sin(alpha)*np.sin(beta))
+            u = np.array([np.cos(beta), np.cos(alpha) * np.sin(beta), np.sin(alpha) * np.sin(beta)], dtype=float)
 
             sum_pos_side = 0
             sum_neg_side = 0
@@ -170,11 +169,10 @@ def ratio(ordenados, cp, Nz = 100, Nd = 100, z_vals = [0,1,2]):
                 else:
                     worst_u = -u
 
-    
     return worst_ratio, worst_u
 
 
-def new_oertel(ordenados, puntos_test, z_vals = [0,1,2], Nz= 100, Nd = 100):
+def new_oertel(ordenados, puntos_test, z_vals = [0,1,2], Nz= 100, Nd = 100, N_Muestras = 50):
     """
     Busca un centerpoint aproximado maximizando:
         F(cp) = min_u  [ sum_z min(Vol(S_z ∩ H_u^+), Vol(S_z ∩ H_u^-)) ] / sum_z Vol(S_z)
@@ -190,13 +188,13 @@ def new_oertel(ordenados, puntos_test, z_vals = [0,1,2], Nz= 100, Nd = 100):
     bestCP = None
     bestU = None
     
-
+    contador_de_indice = 0
     for candidato in puntos_test: #iterar sobre los centerpoints candidatos
         cp = np.asarray(candidato, dtype = float) #verificar que sea array
 
         #evaluar el ratio de oertel
 
-        F_cp, u_cp = ratio(ordenados, cp)
+        F_cp, u_cp = ratio(ordenados, cp, Nz=Nz, Nd=Nd, z_vals=z_vals)
         #que tan central es el punto
 
         print(f"Punto{cp} -> F: {F_cp}")
@@ -205,22 +203,12 @@ def new_oertel(ordenados, puntos_test, z_vals = [0,1,2], Nz= 100, Nd = 100):
         if F_cp > bestF:
             bestF = float(F_cp)
             bestCP = cp.copy()
-            bestU = np.asarray(u_cp, dtype = float)
-        
-    return bestCP, float(bestF), bestU
-
-
-def linea_de_ensayo(v1, va, N_Muestras = 51):
-    v1 = np.asarray(v1)
-    va = np.asarray(va)
-
+            bestU = None if u_cp is None else np.asarray(u_cp, dtype = float)
+            if contador_de_indice <=3:
+                indice = contador_de_indice
+            else:
+                indice = (contador_de_indice - 3) / N_Muestras
+        contador_de_indice += 1
     
-    t = np.linspace(0,1,N_Muestras) 
-    # Retorna números equitativamente espaciados entre 0 y 1
-
-    muestras = []
-    for i in t:
-        muestra = (1-i)*v1 + i*va
-        muestras.append(muestra)
-        
-    return muestras
+    print("Best centerpoint: ", bestCP, "Best F: ", bestF, "Best u: ", bestU, "índice: ", indice)
+    return bestCP, float(bestF), bestU
