@@ -1,0 +1,54 @@
+Requirement already satisfied: pip in ./.venv/lib/python3.9/site-packages (21.3.1)
+Collecting pip
+  Using cached pip-26.0.1-py3-none-any.whl (1.8 MB)
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 21.3.1
+    Uninstalling pip-21.3.1:
+      Successfully uninstalled pip-21.3.1
+Successfully installed pip-26.0.1
+Collecting numpy (from -r requirements.txt (line 1))
+  Downloading numpy-2.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+Collecting scipy (from -r requirements.txt (line 2))
+  Downloading scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+Downloading numpy-2.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (19.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 19.5/19.5 MB 10.1 MB/s  0:00:01
+Downloading scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (38.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 38.6/38.6 MB 11.5 MB/s  0:00:03
+Installing collected packages: numpy, scipy
+
+Successfully installed numpy-2.0.2 scipy-1.13.1
+Punto[0.         0.38557313 0.35262786] -> F: -4.160617423658592e-16
+Punto[1.         0.49489808 0.37383954] -> F: 0.17549924829827068
+Punto[2.         0.28613935 0.25632583] -> F: 0.05523541892699119
+Punto[1.         0.33585624 0.30447685] -> F: 0.17549924829827068
+Punto[1.         0.4789939  0.36690327] -> F: 0.17549924829827068
+Punto[1.         0.46468013 0.36066063] -> F: 0.17549924829827068
+Punto[1.         0.45036637 0.35441799] -> F: 0.17549924829827068
+Punto[1.         0.4360526  0.34817534] -> F: 0.17549924829827068
+Punto[1.         0.42173884 0.3419327 ] -> F: 0.17549924829827068
+Punto[1.         0.40742507 0.33569006] -> F: 0.17549924829827068
+Punto[1.         0.39311131 0.32944742] -> F: 0.17549924829827068
+Punto[1.         0.37879754 0.32320477] -> F: 0.17549924829827068
+Punto[1.         0.36448377 0.31696213] -> F: 0.17549924829827068
+Punto[1.         0.35017001 0.31071949] -> F: 0.17549924829827068
+Best centerpoint:  [1.         0.49489808 0.37383954] Best F:  0.17549924829827068 Best u:  [-1. -0. -0.] índice:  1
+{
+  "seed": 2,
+  "n_per_z": 5,
+  "nz": 20,
+  "nd": 20,
+  "n_muestras": 10,
+  "best_f": 0.17549924829827068,
+  "best_cp": [
+    1.0,
+    0.49489808423315235,
+    0.3738395406906843
+  ],
+  "best_u": [
+    -1.0,
+    -0.0,
+    -0.0
+  ],
+  "n_candidatos": 14
+}
