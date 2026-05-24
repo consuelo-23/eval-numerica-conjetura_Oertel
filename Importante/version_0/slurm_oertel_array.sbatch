@@ -11,7 +11,7 @@ set -euo pipefail
 
 # Ajusta estas variables al enviar con --export o editando este archivo.
 RUN_NAME="${RUN_NAME:-oertel_${SLURM_ARRAY_JOB_ID:-manual}}"
-BASE_DIR="${BASE_DIR:-/mnt/beegfs/home/crodriguez/oertel_runs}"
+BASE_DIR="${BASE_DIR:-/mnt/beegfs/home/crodriguez/code/Importante/oertel_runs}"
 PROJECT_DIR="${PROJECT_DIR:-/mnt/beegfs/home/crodriguez/version_0}"
 OUTDIR="${BASE_DIR}/${RUN_NAME}/results"
 
