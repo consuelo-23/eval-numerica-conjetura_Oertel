@@ -153,9 +153,11 @@ def ratio(ordenados, cp, Nz = 100, Nd = 100, z_vals = [0,1,2]):
                 # Clippear el polígono del lado positivo (H_u^+) y del lado negativo (H_u^-)
 
                 poly_pos = clip_poligono(grupo, z, cp, u)
+                poly_neg = clip_poligono(grupo, z, cp, -u)
                 sum_pos_side += abs(area_2d(poly_pos))
+                sum_neg_side += abs(area_2d(poly_neg))
 
-            sum_neg_side = tot_area - sum_pos_side
+        
             sum_min_slices = min(sum_pos_side, sum_neg_side)
 
             ratio = sum_min_slices / tot_area
