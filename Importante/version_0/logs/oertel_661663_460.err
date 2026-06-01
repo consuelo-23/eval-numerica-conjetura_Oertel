@@ -1,0 +1,2 @@
+slurmstepd: error: TMPDIR [/data/tmp] is not writeable
+slurmstepd: error: Setting TMPDIR to /tmp
