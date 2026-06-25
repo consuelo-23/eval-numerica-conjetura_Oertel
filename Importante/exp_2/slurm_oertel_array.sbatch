@@ -26,7 +26,7 @@ mkdir -p "${PROJECT_DIR}/logs" "${OUTDIR}"
 cd "${PROJECT_DIR}"
 
 if command -v module >/dev/null 2>&1; then
-  module load python 2>/dev/null || true
+  module load python/3.11
 fi
 
 if [ ! -x ".venv/bin/python" ]; then
