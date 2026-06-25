@@ -207,8 +207,8 @@ def new_oertel(ordenados, puntos_test, z_vals = [0,1,2], Nz= 100, Nd = 100, N_Mu
             bestCP = cp.copy()
             bestU = None if u_cp is None else np.asarray(u_cp, dtype = float)
             indice = contador_de_indice
-	    else:
-	        contador_de_indice += 1
+	    
+        contador_de_indice += 1
     
     return {
         "best_cp": bestCP,
