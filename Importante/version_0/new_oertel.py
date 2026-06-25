@@ -212,5 +212,9 @@ def new_oertel(ordenados, puntos_test, z_vals = [0,1,2], Nz= 100, Nd = 100, N_Mu
                 indice = (contador_de_indice - 3)
         contador_de_indice += 1
     
-    print("Best centerpoint: ", bestCP, "Best F: ", bestF, "Best u: ", bestU, "índice: ", indice)
-    return bestCP, float(bestF), bestU
+    return {
+        "best_cp": bestCP,
+        "best_f": float(bestF),
+        "best_u": bestU,
+        "best_candidate_index": indice
+    }
