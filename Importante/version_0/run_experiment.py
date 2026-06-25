@@ -67,7 +67,7 @@ def main():
         "best_f": best_f,
         "best_cp": best_cp.tolist() if best_cp is not None else None,
         "best_u": best_u.tolist() if best_u is not None else None,
-	"best_index": best_index,
+	    "best_index": best_index,
         "n_candidatos": len(candidatos),
     }
 
