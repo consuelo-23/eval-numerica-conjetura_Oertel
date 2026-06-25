@@ -1,0 +1,8 @@
+slurmstepd: error: Unable to create TMPDIR [/data/tmp]: Permission denied
+slurmstepd: error: Setting TMPDIR to /tmp
+Traceback (most recent call last):
+  File "/mnt/beegfs/home/crodriguez/code/Importante/version_0/run_experiment.py", line 85, in <module>
+    main()
+  File "/mnt/beegfs/home/crodriguez/code/Importante/version_0/run_experiment.py", line 40, in main
+    best_cp, best_f, best_u = new_oertel(
+ValueError: too many values to unpack (expected 3)

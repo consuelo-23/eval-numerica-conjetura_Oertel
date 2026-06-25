@@ -37,6 +37,7 @@ def main():
         "best_f",
         "best_cp",
         "best_u",
+	"best_index",
     ]
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
