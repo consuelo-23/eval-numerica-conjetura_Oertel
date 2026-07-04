@@ -3,7 +3,7 @@ import glob
 import os
 
 #define el path de los archivos 
-ruta = os.path.join('oertel_runs', '**', 'summary.csv')
+ruta = os.path.join('oertel_runs_v2', '**', 'summary.csv')
 #'**' busca en todas las carpetas por el archivo que se llame summary.csv
 
 #para entontrar los pathnames matching un patron especifico
@@ -15,6 +15,6 @@ df = pd.concat((pd.read_csv(f) for f in archivos), ignore_index = True)
 #ignore_index=True reinicia la enumeración de cada archivo para juntar los archivos
 
 #guardar sin indices en el .csv
-df.to_csv('summary_20k.csv', index=False)
+df.to_csv('summary_20k_2.csv', index=False)
 
 print("se han guardado exitosamente")
