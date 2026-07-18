@@ -20,7 +20,7 @@ library(tidyr)
 library(stringr)
 
 
-data <- read.csv("C:/Users/consu/OneDrive/UOH/papers_please/code/Importante/summary_20k.csv")
+data <- read.csv("C:/Users/consu/OneDrive/UOH/papers_please/code/Importante/version_0/summary_20k.csv")
 data
 ```
 ```{r}

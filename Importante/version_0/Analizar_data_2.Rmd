@@ -38,6 +38,24 @@ data
 glimpse(data)
 ```
 ```{r}
+library(modeest)
+summary(data$best_index)
+
+densidad <- density(data$best_index)
+
+valor_medio <- mean(data$best_index)
+
+moda = mfv(data$best_index)
+print(moda)
+
+ggplot(data, aes(x = best_index)) +
+  geom_bar(alpha = 0.5, fill = "purple") +
+  geom_vline(aes(xintercept = valor_medio), color = "green", linetype = "dashed", size = 1) + #valor_medio
+  geom_vline(aes(xintercept = moda), color = "steelblue", size =1) #moda
+  theme_minimal()
+```
+
+```{r}
 min_f <- min(data$best_f, na.rm=TRUE)
 
 
